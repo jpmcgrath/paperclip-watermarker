@@ -1,19 +1,25 @@
-class WatermarkerFilter
-  def atop(filter)
-    @filter = filter
-    self
-  end
+module Paperclip
+  module Watermarker
 
-  def filter
-    @filter
-  end
+    class WatermarkerFilter
+      def atop(filter)
+        @filter = filter
+        self
+      end
 
-  def flags(options)
-    filter.flags(options).with_destination("-")
-  end
+      def filter
+        @filter
+      end
 
-  def command(file, options)
-    filter.command(file, options) +
-      ' | composite \( %s -resize 100% \) - -dissolve 20% -gravity center -geometry +0+0'
+      def flags(options)
+        filter.flags(options).with_destination("-")
+      end
+
+      def command(source, destination, options)
+        filter.command(source, destination, flags(options)) +
+          ' | composite \( %s -resize 100% \) - -dissolve 20% -gravity center -geometry +0+0'
+      end
+    end
+
   end
 end

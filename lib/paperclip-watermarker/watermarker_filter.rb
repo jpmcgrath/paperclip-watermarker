@@ -7,17 +7,15 @@ module Paperclip
         self
       end
 
-      def filter
-        @filter
-      end
-
-      def flags(options)
-        filter.flags(options).with_destination("-")
-      end
-
       def command(source, destination, options)
-        filter.command(source, '-', flags(options)) +
-          %{ | composite \\( "#{options[:watermark].path}" -resize 100% \\) - -dissolve 20% -gravity center -geometry +0+0 "#{destination}"}
+        @filter.command(source, destination, options).tap do |cmd|
+          cmd.
+            for_command(:composite).
+            with_options(:source_file_options => %{\\( "#{options[:watermark].path}" -resize 100% \\)}).
+            with_flag(:dissolve, '20%').
+            with_flag(:gravity, 'center').
+            with_flag(:geometry, '+0+0')
+        end
       end
     end
 

@@ -16,8 +16,8 @@ module Paperclip
       end
 
       def command(source, destination, options)
-        filter.command(source, destination, flags(options)) +
-          ' | composite \( %s -resize 100% \) - -dissolve 20% -gravity center -geometry +0+0'
+        filter.command(source, '-', flags(options)) +
+          %{ | composite \\( "#{options[:watermark].path}" -resize 100% \\) - -dissolve 20% -gravity center -geometry +0+0 "#{destination}"}
       end
     end
 

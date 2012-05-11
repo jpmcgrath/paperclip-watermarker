@@ -29,11 +29,11 @@ In your ActiveModel class:
           :watermark => large_watermark }},
        :processor => [:thumbnailed_watermarker]
 
-     def medium_watermark
+     def self.medium_watermark
        File.open(File.join(Rails.root, *%w(public images medium_watermark.png)))
      end
 
-     def large_watermark
+     def self.large_watermark
        File.open(File.join(Rails.root, *%w(public images large_watermark.png)))
      end
 
